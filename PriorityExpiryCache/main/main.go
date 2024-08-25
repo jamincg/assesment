@@ -68,7 +68,7 @@ func (pe *PriorityExpiryCache) Set(key string, value interface{}, priority int, 
 	}
 }
 
-// Get get item if exists and not expired
+// Get item if exists and not expired
 func (pe *PriorityExpiryCache) Get(key string) (interface{}, bool) {
 	if element, found := pe.ItemMap[key]; found {
 		pe.LRUList.MoveToFront(element) // move to the front of linked list
@@ -97,7 +97,7 @@ func (pe *PriorityExpiryCache) evictItem() {
 		}
 	}
 
-	// if no items has expired, get the item with the lowest priority and delete it
+	// if no item has expired, get the item with the lowest priority and delete it
 	for pe.PriorityQueue.Len() > 0 {
 		// peek at the first and second item to check if we have more than one item with the same priority
 		priorityItem1 := pe.PriorityQueue[0]
@@ -115,16 +115,18 @@ func (pe *PriorityExpiryCache) evictItem() {
 	pe.removeElement(element, -1, -1)
 }
 
+// remove based on key
 func (pe *PriorityExpiryCache) remove(key string, pqExpiryIndex, pqIndex int) {
 	if element, found := pe.ItemMap[key]; found {
 		pe.removeElement(element, pqExpiryIndex, pqIndex)
 	}
 }
 
+// removeElement based on element
 func (pe *PriorityExpiryCache) removeElement(element *list.Element, pqExpiryIndex, pqIndex int) {
 	item := element.Value.(*model.CacheItem)
-	delete(pe.ItemMap, item.Key)
-	pe.LRUList.Remove(element)
+	delete(pe.ItemMap, item.Key) // delete from Map
+	pe.LRUList.Remove(element)   // delete from linked list
 
 	// if we have the index use it to remove item from the priority queue
 	if pqExpiryIndex > -1 {

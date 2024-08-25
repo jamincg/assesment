@@ -13,6 +13,7 @@ type CacheItem struct {
 	ExpireTime time.Time
 }
 
+// PriorityQueueItem
 type PriorityQueueItem struct {
 	Item  *CacheItem
 	Index int
