@@ -10,7 +10,7 @@ import (
 
 /* Time and Space complexity
 Time Complexity - O(logN) for most operations, including adding, editing, evicting, removing and updating items.
-Space Complexity - O(N) for storing up to N items in a cache.
+Space Complexity - O(N) for storing up to N items in the cache.
 */
 
 type PriorityExpiryCache model.PriorityExpiryCache
