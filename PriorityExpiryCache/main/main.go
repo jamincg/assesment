@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+/* Time and Space complexity
+Time Complexity - O(logN) for most operations, including adding, editing, evicting, removing and updating items.
+Space Complexity - O(N) for storing up to N items in a cache.
+*/
+
 type PriorityExpiryCache model.PriorityExpiryCache
 
 // NewPriorityExpiryCache - constructor
@@ -30,7 +35,6 @@ func (pe *PriorityExpiryCache) SetMaxItems(maxItem int) {
 // Add item to the cache
 // Evict an item if the Cache has reached capacity
 func (pe *PriorityExpiryCache) Set(key string, value interface{}, priority int, expire time.Duration) {
-
 	expiry := time.Now().Add(expire)
 	// if key exists, move it to the front of the linked list denoting that it was recently used
 	if element, found := pe.ItemMap[key]; found {
@@ -186,7 +190,7 @@ func main() {
 	*/
 	fmt.Println("Test 1")
 	cache.Set("A", "Item A", 1, time.Second*5)
-	cache.Set("B", "Item B", 1, time.Second*2)
+	cache.Set("B", "Item B", 1, time.Second*2) // first expiry
 	cache.Set("C", "Item C", 1, time.Second*5)
 	time.Sleep(time.Second * 2)
 	// add D
@@ -235,8 +239,8 @@ func main() {
 	fmt.Println("\nTest 3")
 	// the items get updated using the update method.
 	cache.Set("A", "Item A", 3, time.Second*30)
-	cache.Set("B", "Item B", 1, time.Second*20)
-	cache.Set("D", "Item D", 1, time.Second*20)
+	cache.Set("B", "Item B", 1, time.Second*20) // same priority
+	cache.Set("D", "Item D", 1, time.Second*20) // same priority
 
 	// expect Key B found message
 	if val, found := cache.Get("B"); found {
